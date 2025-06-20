@@ -5,6 +5,7 @@ import cors from 'cors'
 import { ENV} from './config/env.js'
 import favoriteRoutes from './routes/favorite-routes.js'  
 import { notFound,errorHandler } from './middleware/error-middleware.js'
+import job from "./config/cron.js";
 
 
 const {PORT} = ENV
@@ -14,6 +15,8 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.disable('x-powered-by')
+
+if (ENV.NODE_ENV === "production") job.start();
 
 app.use((req, res, next) =>{
     console.log(req.path,req.method)
